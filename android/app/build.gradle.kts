@@ -6,20 +6,19 @@ plugins {
 }
 
 android {
-    namespace = "com.stl.manager"
+    namespace = "com.example.stl_manager"
     compileSdk = 35
-    namespace = "28.2.13676358"
+
+    ndkVersion = "28.2.13676358"
 
     defaultConfig {
-        applicationId = "com.stl.manager"
-        minSdk = 24
-        targetSdk = 34
+        applicationId = "com.example.stl_manager"
+        minSdk = 23
+        targetSdk = 35
         versionCode = 1
-        versionName = "1.0.0"
-
-        multiDexEnabled = true
+        versionName = "1.0"
     }
-
+}
     buildTypes {
         release {
             isMinifyEnabled = false
