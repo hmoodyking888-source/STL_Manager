@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1023498527847",
+    "project_id": "sultan-net-7500c",
+    "storage_bucket": "sultan-net-7500c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1023498527847:android:fca7851cd7a7ac179660c2",
+        "android_client_info": {
+          "package_name": "com.sultan.stn_manager"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfypMPmcxMNFF1u0uXGaXt1f6QQtRgGsw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

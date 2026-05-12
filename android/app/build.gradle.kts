@@ -7,7 +7,8 @@ plugins {
 
 android {
     namespace = "com.stl.manager"
-    compileSdk = 34
+    compileSdk = 35
+    namespace = "28.2.13676358"
 
     defaultConfig {
         applicationId = "com.stl.manager"
