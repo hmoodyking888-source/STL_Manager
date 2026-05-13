@@ -6,25 +6,28 @@ plugins {
 
 android {
     namespace = "com.example.stl_manager"
-    compileSdk = 36 // التوافق مع أحدث إصدارات أندرويد المطلوبة
+    compileSdk = 35 
 
-    // حل مشكلة NDK المذكورة في الخطأ الأخير
     ndkVersion = "28.2.13676358"
 
     defaultConfig {
         applicationId = "com.example.stl_manager"
         minSdk = 23
-        targetSdk = 36 
+        targetSdk = 35 
         versionCode = 1
         versionName = "1.0"
         multiDexEnabled = true
+
+        // إجبار النظام على معمارية الهواتف فقط لتجنب خطأ jni
+        ndk {
+            abiFilters.add("arm64-v8a")
+        }
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
             isShrinkResources = false
-            // استخدام مفتاح debug مؤقتاً لضمان نجاح البناء وتوليد الملف
             signingConfig = signingConfigs.getByName("debug")
         }
     }

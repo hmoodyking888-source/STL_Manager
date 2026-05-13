@@ -1,27 +1,21 @@
 workflows:
   android-workflow:
     name: STL Manager Android
-
     environment:
       flutter: stable
       java: 17
-
     scripts:
       - flutter clean
       - flutter pub get
-
-      # بناء التطبيق
-      - flutter build apk --release --no-tree-shake-icons --verbose
-
-      # عرض كل ملفات APK الموجودة
-      - find /Users/builder/clone -name "*.apk"
-
-      # عرض ملفات build كاملة
-      - ls -R build/app/outputs || true
-
+      # البناء لمعمارية واحدة فقط (ARM64) لتسريع العملية وتجنب الأخطاء
+      - flutter build apk --release --no-tree-shake-icons --target-platform android-arm64
+      - |
+        # التأكد من التقاط الملف أينما كان
+        mkdir -p build/app/outputs/flutter-apk
+        find build -name "*.apk" -exec cp {} build/app/outputs/flutter-apk/ \;
     artifacts:
-      - build///*.apk
-
+      - build/app/outputs/flutter-apk/*.apk
+      - build/**/*.apk
     publishing:
       email:
         recipients:
