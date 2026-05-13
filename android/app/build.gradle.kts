@@ -6,7 +6,10 @@ plugins {
 
 android {
     namespace = "com.example.stl_manager"
-    compileSdk = 36 // الترقية لـ 36 ضرورية جداً الآن
+    compileSdk = 36 // التوافق مع أحدث إصدارات أندرويد المطلوبة
+
+    // حل مشكلة NDK المذكورة في الخطأ الأخير
+    ndkVersion = "28.2.13676358"
 
     defaultConfig {
         applicationId = "com.example.stl_manager"
@@ -21,7 +24,7 @@ android {
         release {
             isMinifyEnabled = false
             isShrinkResources = false
-            // استخدام debug لضمان البناء بدون ملف توقيع حالياً
+            // استخدام مفتاح debug مؤقتاً لضمان نجاح البناء وتوليد الملف
             signingConfig = signingConfigs.getByName("debug")
         }
     }
