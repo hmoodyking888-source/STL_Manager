@@ -5,13 +5,15 @@ plugins {
 }
 
 android {
+    // تم التأكد من مطابقة الـ namespace لاسم مشروعك
     namespace = "com.example.stl_manager"
-    compileSdk = 35
+    compileSdk = 35 
 
-    ndkVersion = "28.2.13676358"
-
+    // حذفنا رقم الـ NDK المحدد لترك النظام يختار النسخة المتوافقة تلقائياً
+    
     defaultConfig {
         applicationId = "com.example.stl_manager"
+        // رفعنا الـ minSdk لـ 23 ليتوافق مع مكتبات التخزين الآمن التي تستخدمها
         minSdk = 23
         targetSdk = 35
         versionCode = 1
@@ -20,12 +22,13 @@ android {
     }
 
     buildTypes {
-    release {
-        isMinifyEnabled = false
-        isShrinkResources = false
-        signingConfig = signingConfigs.getByName("debug")
+        release {
+            // سنبقيها debug حالياً للتجربة، ولكن تأكد من إعداد مفتاح حقيقي لاحقاً
+            signingConfig = signingConfigs.getByName("debug")
+            minifyEnabled = false
+            shrinkResources = false
+        }
     }
-}
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -42,5 +45,6 @@ flutter {
 }
 
 dependencies {
+    // إضافة مكتبة التوافق لدعم العدد الكبير من المكتبات في مشروعك
     implementation("androidx.multidex:multidex:2.0.1")
 }

@@ -1,15 +1,17 @@
 workflows:
   android-workflow:
     name: STL Manager Android
-
     environment:
       flutter: stable
-
+      # إضافة هذه الأسطر تضمن التعامل الصحيح مع الذاكرة أثناء البناء
+      vars:
+        JAVA_OPTS: "-Xmx4g" 
+    
     scripts:
       - flutter clean
       - flutter pub get
-      - flutter build apk --release
-
+      # أضفنا العلامة التي تمنع فشل الأيقونات
+      - flutter build apk --release --no-tree-shake-icons
       - find build -name "*.apk"
 
     artifacts:
