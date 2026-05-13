@@ -6,14 +6,14 @@ plugins {
 
 android {
     namespace = "com.example.stl_manager"
-    compileSdk = 35
+    compileSdk = 36
 
     ndkVersion = "28.2.13676358"
 
     defaultConfig {
         applicationId = "com.example.stl_manager"
         minSdk = 23
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
         multiDexEnabled = true

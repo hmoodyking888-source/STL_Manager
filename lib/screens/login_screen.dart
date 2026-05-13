@@ -172,7 +172,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   style: TextStyle(
                     color: AppTheme.primaryGold,
                   ),
-                )
+                ),
                 style: OutlinedButton.styleFrom(
                   minimumSize: Size(double.infinity, 55.h),
                   side: const BorderSide(
