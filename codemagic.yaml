@@ -7,12 +7,12 @@ workflows:
     scripts:
       - flutter clean
       - flutter pub get
+      # بناء ملف APK واحد شامل (Fat APK) لضمان سهولة العثور عليه وتوزيعه
       - flutter build apk --release --no-tree-shake-icons
-      # سطر سحري: ينسخ الملف لمكان يسهل على كودماجيك رؤيته
-      - mkdir -p final_apk
-      - find build/app/outputs/flutter-apk -name "*.apk" -exec cp {} final_apk/ \;
     artifacts:
-      - final_apk/*.apk
+      # البحث في كل المجلدات الممكنة عن أي ملف APK تم إنتاجه
+      - build/app/outputs/flutter-apk/*.apk
+      - build/app/outputs/apk/release/*.apk
     publishing:
       email:
         recipients:
