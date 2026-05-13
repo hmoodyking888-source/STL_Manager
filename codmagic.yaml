@@ -6,11 +6,14 @@ workflows:
       flutter: stable
 
     scripts:
+      - flutter clean
       - flutter pub get
       - flutter build apk --release
 
+      - find build -name "*.apk"
+
     artifacts:
-      - build/app/outputs/flutter-apk/app-release.apk
+      - build//outputs//*.apk
 
     publishing:
       email:
