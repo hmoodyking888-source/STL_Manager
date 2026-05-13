@@ -11,10 +11,11 @@ workflows:
       - flutter pub get
       - flutter build apk --release --verbose
 
-      - ls build/app/outputs/flutter-apk/
+      - echo "APK FILES:"
+      - find . -name "*.apk"
 
     artifacts:
-      - build/app/outputs/flutter-apk/app-release.apk
+      - "**/*.apk"
 
     publishing:
       email:
