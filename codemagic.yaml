@@ -7,14 +7,14 @@ workflows:
     scripts:
       - flutter clean
       - flutter pub get
-      # استخدام الأمر المباشر لضمان البناء
+      # بناء التطبيق لمعمارية الهاتف المحددة
       - flutter build apk --release --no-tree-shake-icons --target-platform android-arm64
       - |
-        # أهم خطوة: البحث عن ملف الـ APK ونسخه يدوياً لمجلد المخرجات العام
+        # البحث عن الـ APK المفقود ووضعه في مكان يسهل على Codemagic رؤيته
         mkdir -p build/app/outputs/flutter-apk
         find build -name "*.apk" -exec cp {} build/app/outputs/flutter-apk/ \;
     artifacts:
-      # سنطلب من كود ماجيك عرض أي ملف APK يجده في أي مكان في المشروع
+      # التقاط أي ملف APK يتم إنتاجه في أي مكان داخل المشروع
       - build/**/*.apk
     publishing:
       email:
