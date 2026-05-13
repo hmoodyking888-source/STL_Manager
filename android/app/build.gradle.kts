@@ -5,29 +5,25 @@ plugins {
 }
 
 android {
-    namespace = "com.example.stl_manager"
-    
-    // التعديل المطلوب: رفعه إلى 36 كما طلبت رسالة الخطأ
-    compileSdk = 36 
-
-    ndkVersion = "28.2.13676358"
+    namespace "com.ahmed_nuaimi.stl_manager"
+    compileSdkVersion 33
 
     defaultConfig {
-        applicationId = "com.example.stl_manager"
-        minSdk = 23
-        
-        // رفعه أيضاً لـ 36 لضمان التوافق التام
-        targetSdk = 36 
-        
-        versionCode = 1
-        versionName = "1.0"
-        multiDexEnabled = true
-
-        ndk {
-            abiFilters.add("arm64-v8a")
-        }
+        applicationId "com.ahmed_nuaimi.stl_manager"
+        minSdkVersion 21
+        targetSdkVersion 33
+        versionCode 1
+        versionName "1.0.0"
     }
 
+    buildTypes {
+        release {
+            signingConfig signingConfigs.debug // للتجربة السريعة، استخدم التوقيع الافتراضي
+            minifyEnabled false
+            shrinkResources false
+        }
+    }
+}
     buildTypes {
         release {
             isMinifyEnabled = false

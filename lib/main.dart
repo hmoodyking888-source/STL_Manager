@@ -1,42 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import 'theme/app_theme.dart';
-import 'screens/login_screen.dart';
+import 'app_config.dart';
+import 'services/auth_service.dart';
+import 'screens/dashboard_screen.dart';
+import 'screens/lock_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-  ]);
+  // التحقق من الصلاحية قبل تشغيل التطبيق
+  bool isExpired = await AuthService.checkSubscriptionStatus();
 
-  runApp(
-    const ProviderScope(
-      child: STLManagerApp(),
-    ),
-  );
+  runApp(STNManagerApp(isExpired: isExpired));
 }
 
-class STLManagerApp extends StatelessWidget {
-  const STLManagerApp({super.key});
+class STNManagerApp extends StatelessWidget {
+  final bool isExpired;
+  const STNManagerApp({super.key, required this.isExpired});
 
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilInit(
-      designSize: const Size(412, 915),
-      minTextAdapt: true,
-      splitScreenMode: true,
-      builder: (context, child) {
-        return MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'STL_Manager',
-          theme: AppTheme.darkTheme,
-          home: const LoginScreen(),
-        );
-      },
+    return MaterialApp(
+      title: 'STN Manager',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        brightness: Brightness.dark,
+        scaffoldBackgroundColor: AppConfig.backgroundBlack,
+        fontFamily: 'Cairo',
+      ),
+      // إذا انتهت الصلاحية يفتح صفحة القفل، وإذا لا يفتح الداشبورد
+      home: isExpired ? const LockScreen() : const DashboardScreen(),
     );
   }
 }
