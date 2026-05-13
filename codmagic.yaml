@@ -1,0 +1,18 @@
+workflows:
+  android-workflow:
+    name: STL Manager Android
+
+    environment:
+      flutter: stable
+
+    scripts:
+      - flutter pub get
+      - flutter build apk --release
+
+    artifacts:
+      - build/app/outputs/flutter-apk/app-release.apk
+
+    publishing:
+      email:
+        recipients:
+          - hmoodyking888@gmail.com
