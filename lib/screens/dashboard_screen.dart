@@ -119,7 +119,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           color: AppTheme.primaryGold,
                         ),
                       ),
-                      child: Icon(
+                      child: FaIcon(
                         FontAwesomeIcons.crown,
                         color: AppTheme.primaryGold,
                         size: 28.sp,

@@ -45,7 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           width: 1,
                         ),
                       ),
-                      child: Icon(
+                      child: FaIcon(
                         FontAwesomeIcons.crown,
                         color: AppTheme.primaryGold,
                         size: 30.sp,
@@ -172,7 +172,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   style: TextStyle(
                     color: AppTheme.primaryGold,
                   ),
-                ),
+                )
                 style: OutlinedButton.styleFrom(
                   minimumSize: Size(double.infinity, 55.h),
                   side: const BorderSide(
