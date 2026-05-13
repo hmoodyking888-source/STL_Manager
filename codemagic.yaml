@@ -7,14 +7,14 @@ workflows:
     scripts:
       - flutter clean
       - flutter pub get
-      # البناء لمعمارية واحدة فقط (ARM64) لتسريع العملية وتجنب الأخطاء
+      # استخدام الأمر المباشر لضمان البناء
       - flutter build apk --release --no-tree-shake-icons --target-platform android-arm64
       - |
-        # التأكد من التقاط الملف أينما كان
+        # أهم خطوة: البحث عن ملف الـ APK ونسخه يدوياً لمجلد المخرجات العام
         mkdir -p build/app/outputs/flutter-apk
         find build -name "*.apk" -exec cp {} build/app/outputs/flutter-apk/ \;
     artifacts:
-      - build/app/outputs/flutter-apk/*.apk
+      # سنطلب من كود ماجيك عرض أي ملف APK يجده في أي مكان في المشروع
       - build/**/*.apk
     publishing:
       email:
