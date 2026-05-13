@@ -9,9 +9,13 @@ workflows:
     scripts:
       - flutter clean
       - flutter pub get
-      - flutter build apk --release --split-per-abi
+      # استخدام العلم --no-tree-shake-icons يضمن عدم فشل بناء الأيقونات
+      - flutter build apk --release --split-per-abi --no-tree-shake-icons
 
     artifacts:
+      # هذا المسار سيبحث في كل المجلدات الفرعية عن أي ملف ينتهي بـ .apk
+      - build/app/outputs/flutter-apk/*.apk
+      - build/app/outputs/apk/release/*.apk
       - build//outputs//*.apk
 
     publishing:
