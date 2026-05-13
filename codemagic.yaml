@@ -1,0 +1,19 @@
+workflows:
+  android-workflow:
+    name: STL Manager Android
+    environment:
+      flutter: stable
+      java: 17
+    scripts:
+      - flutter clean
+      - flutter pub get
+      - flutter build apk --release --no-tree-shake-icons
+      # سطر سحري: ينسخ الملف لمكان يسهل على كودماجيك رؤيته
+      - mkdir -p final_apk
+      - find build/app/outputs/flutter-apk -name "*.apk" -exec cp {} final_apk/ \;
+    artifacts:
+      - final_apk/*.apk
+    publishing:
+      email:
+        recipients:
+          - hmoodyking888@gmail.com
