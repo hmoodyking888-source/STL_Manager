@@ -20,10 +20,12 @@ android {
     }
 
     buildTypes {
-        release {
-            signingConfig = signingConfigs.getByName("debug")
-        }
+    release {
+        isMinifyEnabled = false
+        isShrinkResources = false
+        signingConfig = signingConfigs.getByName("debug")
     }
+}
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
