@@ -1,87 +1,20 @@
 workflows:
   android-workflow:
     name: STL Manager Android
+
     environment:
       flutter: stable
-      # إضافة هذه الأسطر تضمن التعامل الصحيح مع الذاكرة أثناء البناء
-      vars:
-        JAVA_OPTS: "-Xmx4g" 
-    
+      java: 17
+
     scripts:
       - flutter clean
       - flutter pub get
-      # أضفنا العلامة التي تمنع فشل الأيقونات
-      - flutter build apk --release --no-tree-shake-icons
-      - find build -name "*.apk"
+      - flutter build apk --release --verbose
+
+      - ls build/app/outputs/flutter-apk/
 
     artifacts:
-      - build//outputs//*.apk
-
-    publishing:
-      email:
-        recipients:
-          - hmoodyking888workflows:
-  android-workflow:
-    name: STL Manager Android
-    environment:
-      flutter: stable
-      # إضافة هذه الأسطر تضمن التعامل الصحيح مع الذاكرة أثناء البناء
-      vars:
-        JAVA_OPTS: "-Xmx4g" 
-    
-    scripts:
-      - flutter clean
-      - flutter pub get
-      # أضفنا العلامة التي تمنع فشل الأيقونات
-      - flutter build apk --release --no-tree-shake-icons
-      - find build -name "*.apk"
-
-    artifacts:
-      - build//outputs//*.apk
-
-    publishing:
-      email:
-        recipients:
-          - hmoodyking888workflows:
-  android-workflow:
-    name: STL Manager Android
-    environment:
-      flutter: stable
-      # إضافة هذه الأسطر تضمن التعامل الصحيح مع الذاكرة أثناء البناء
-      vars:
-        JAVA_OPTS: "-Xmx4g" 
-    
-    scripts:
-      - flutter clean
-      - flutter pub get
-      # أضفنا العلامة التي تمنع فشل الأيقونات
-      - flutter build apk --release --no-tree-shake-icons
-      - find build -name "*.apk"
-
-    artifacts:
-      - build//outputs//*.apk
-
-    publishing:
-      email:
-        recipients:
-          - hmoodyking888workflows:
-  android-workflow:
-    name: STL Manager Android
-    environment:
-      flutter: stable
-      # إضافة هذه الأسطر تضمن التعامل الصحيح مع الذاكرة أثناء البناء
-      vars:
-        JAVA_OPTS: "-Xmx4g" 
-    
-    scripts:
-      - flutter clean
-      - flutter pub get
-      # أضفنا العلامة التي تمنع فشل الأيقونات
-      - flutter build apk --release --no-tree-shake-icons
-      - find build -name "*.apk"
-
-    artifacts:
-      - build//outputs//*.apk
+      - build/app/outputs/flutter-apk/app-release.apk
 
     publishing:
       email:

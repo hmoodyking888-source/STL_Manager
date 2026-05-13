@@ -6,28 +6,26 @@ plugins {
 
 android {
     namespace = "com.example.stl_manager"
-    compileSdk = 36 // تم التحديث لـ 36 بناءً على طلب النظام
+    compileSdk = 35
 
-    ndkVersion = "28.2.13676358" // تم التحديث بناءً على طلب النظام
+    ndkVersion = "28.2.13676358"
 
     defaultConfig {
         applicationId = "com.example.stl_manager"
         minSdk = 23
-        targetSdk = 36 // تم التحديث لـ 36
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
         multiDexEnabled = true
     }
-    // ... باقي الكود كما هو    }
 
     buildTypes {
-        release {
-            // سنبقيها debug حالياً للتجربة، ولكن تأكد من إعداد مفتاح حقيقي لاحقاً
-            signingConfig = signingConfigs.getByName("debug")
-            minifyEnabled = false
-            shrinkResources = false
-        }
+    release {
+        isMinifyEnabled = false
+        isShrinkResources = false
+        signingConfig = signingConfigs.getByName("debug")
     }
+}
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -44,6 +42,5 @@ flutter {
 }
 
 dependencies {
-    // إضافة مكتبة التوافق لدعم العدد الكبير من المكتبات في مشروعك
     implementation("androidx.multidex:multidex:2.0.1")
 }
