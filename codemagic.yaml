@@ -7,12 +7,12 @@ workflows:
     scripts:
       - flutter clean
       - flutter pub get
-      # بناء ملف APK واحد شامل (Fat APK) لضمان سهولة العثور عليه وتوزيعه
+      # استخدام أمر البناء الأساسي لضمان خروج ملف واحد شامل
       - flutter build apk --release --no-tree-shake-icons
     artifacts:
-      # البحث في كل المجلدات الممكنة عن أي ملف APK تم إنتاجه
+      # هذا السطر سيبحث في كل مكان داخل مجلد build عن أي ملف apk
+      - build/**/*.apk
       - build/app/outputs/flutter-apk/*.apk
-      - build/app/outputs/apk/release/*.apk
     publishing:
       email:
         recipients:

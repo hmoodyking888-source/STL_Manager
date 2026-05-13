@@ -6,26 +6,25 @@ plugins {
 
 android {
     namespace = "com.example.stl_manager"
-    compileSdk = 36
-
-    ndkVersion = "28.2.13676358"
+    compileSdk = 36 // الترقية لـ 36 ضرورية جداً الآن
 
     defaultConfig {
         applicationId = "com.example.stl_manager"
         minSdk = 23
-        targetSdk = 36
+        targetSdk = 36 
         versionCode = 1
         versionName = "1.0"
         multiDexEnabled = true
     }
 
     buildTypes {
-    release {
-        isMinifyEnabled = false
-        isShrinkResources = false
-        signingConfig = signingConfigs.getByName("debug")
+        release {
+            isMinifyEnabled = false
+            isShrinkResources = false
+            // استخدام debug لضمان البناء بدون ملف توقيع حالياً
+            signingConfig = signingConfigs.getByName("debug")
+        }
     }
-}
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
