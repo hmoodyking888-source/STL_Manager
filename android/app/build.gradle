@@ -6,12 +6,12 @@ plugins {
 
 android {
     namespace "com.ahmed_nuaimi.stl_manager"
-    compileSdkVersion 33
+    compileSdkVersion 36
 
     defaultConfig {
         applicationId "com.ahmed_nuaimi.stl_manager"
         minSdkVersion 21
-        targetSdkVersion 33
+        targetSdkVersion 36
         versionCode 1
         versionName "1.0.0"
         multiDexEnabled true
