@@ -9,13 +9,10 @@ workflows:
     scripts:
       - flutter clean
       - flutter pub get
-      - flutter build apk --release --verbose
-
-      - echo "APK FILES:"
-      - find . -name "*.apk"
+      - flutter build apk --release --split-per-abi
 
     artifacts:
-      - "**/*.apk"
+      - build//outputs//*.apk
 
     publishing:
       email:
