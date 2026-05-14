@@ -1,9 +1,6 @@
-import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
-import '../theme/app_theme.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../app_config.dart';
 import 'dashboard_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -14,189 +11,108 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final TextEditingController ipController = TextEditingController();
-  final TextEditingController userController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController _routerNameController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
+  final TextEditingController _userController = TextEditingController();
+  final TextEditingController _passController = TextEditingController();
 
-  bool isLoading = false;
-  bool obscurePassword = true;
+  void _saveAndLogin() async {
+    if (_addressController.text.isEmpty || _userController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("يرجى ملء جميع الحقول الأساسية")),
+      );
+      return;
+    }
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('routerName', _routerNameController.text);
+    await prefs.setString('address', _addressController.text);
+    await prefs.setString('user', _userController.text);
+    await prefs.setString('pass', _passController.text);
+    await prefs.setBool('isLoggedIn', true);
+
+    if (mounted) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const DashboardScreen()),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.all(20.w),
+      backgroundColor: AppConfig.backgroundBlack,
+      body: Center(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(30),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(height: 30.h),
-              FadeInDown(
-                child: Row(
-                  children: [
-                    Container(
-                      width: 70.w,
-                      height: 70.h,
-                      decoration: BoxDecoration(
-                        color: AppTheme.cardColor,
-                        borderRadius: BorderRadius.circular(20.r),
-                        border: Border.all(
-                          color: AppTheme.primaryGold,
-                          width: 1,
-                        ),
-                      ),
-                      child: FaIcon(
-                        FontAwesomeIcons.crown,
-                        color: AppTheme.primaryGold,
-                        size: 30.sp,
-                      ),
-                    ),
-                    SizedBox(width: 15.w),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "STL_Manager",
-                          style: TextStyle(
-                            color: AppTheme.primaryGold,
-                            fontSize: 28.sp,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 5.h),
-                        Text(
-                          "ربطك بالعالم بسرعة وثقة",
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 14.sp,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+              // شعار الأسد الذهبي
+              Image.asset('assets/images/logo.png', height: 120),
+              const SizedBox(height: 20),
+              const Text(
+                "تسجيل الدخول للراوتر",
+                style: TextStyle(
+                    color: AppConfig.primaryGold,
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 50.h),
-              FadeInLeft(
-                child: Text(
-                  "تسجيل الدخول",
-                  style: TextStyle(
-                    color: AppTheme.primaryGold,
-                    fontSize: 24.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              SizedBox(height: 30.h),
-              TextField(
-                controller: ipController,
-                style: const TextStyle(color: Colors.white),
-                decoration: const InputDecoration(
-                  hintText: "عنوان الراوتر IP",
-                  prefixIcon: Icon(Icons.router),
-                ),
-              ),
-              SizedBox(height: 20.h),
-              TextField(
-                controller: userController,
-                style: const TextStyle(color: Colors.white),
-                decoration: const InputDecoration(
-                  hintText: "اسم المستخدم",
-                  prefixIcon: Icon(Icons.person),
-                ),
-              ),
-              SizedBox(height: 20.h),
-              TextField(
-                controller: passwordController,
-                obscureText: obscurePassword,
-                style: const TextStyle(color: Colors.white),
-                decoration: InputDecoration(
-                  hintText: "كلمة المرور",
-                  prefixIcon: const Icon(Icons.lock),
-                  suffixIcon: IconButton(
-                    onPressed: () {
-                      setState(() {
-                        obscurePassword = !obscurePassword;
-                      });
-                    },
-                    icon: Icon(
-                      obscurePassword ? Icons.visibility_off : Icons.visibility,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 30.h),
+              const SizedBox(height: 30),
+              _buildTextField(_routerNameController,
+                  "اسم الراوتر (مثلاً: برج الفيصلية)", Icons.edit),
+              const SizedBox(height: 15),
+              _buildTextField(_addressController, "عنوان الـ IP أو الكلاود",
+                  Icons.cloud_queue),
+              const SizedBox(height: 15),
+              _buildTextField(
+                  _userController, "اسم المستخدم", Icons.person_outline),
+              const SizedBox(height: 15),
+              _buildTextField(
+                  _passController, "كلمة المرور", Icons.lock_outline,
+                  isPass: true),
+              const SizedBox(height: 30),
               ElevatedButton(
-                onPressed: () async {
-                  setState(() {
-                    isLoading = true;
-                  });
-
-                  await Future.delayed(
-                    const Duration(seconds: 2),
-                  );
-
-                  if (!mounted) return;
-
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const DashboardScreen(),
-                    ),
-                  );
-
-                  setState(() {
-                    isLoading = false;
-                  });
-                },
-                child: isLoading
-                    ? SizedBox(
-                        width: 22.w,
-                        height: 22.h,
-                        child: const CircularProgressIndicator(
-                          color: Colors.black,
-                          strokeWidth: 2,
-                        ),
-                      )
-                    : const Text("دخول"),
-              ),
-              SizedBox(height: 20.h),
-              OutlinedButton.icon(
-                onPressed: () {},
-                icon: const Icon(
-                  Icons.cloud,
-                  color: AppTheme.primaryGold,
-                ),
-                label: const Text(
-                  "إضافة كلاود",
-                  style: TextStyle(
-                    color: AppTheme.primaryGold,
-                  ),
-                ),
-                style: OutlinedButton.styleFrom(
-                  minimumSize: Size(double.infinity, 55.h),
-                  side: const BorderSide(
-                    color: AppTheme.primaryGold,
-                  ),
+                onPressed: _saveAndLogin,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppConfig.primaryGold,
+                  foregroundColor: Colors.black,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 80, vertical: 15),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18.r),
-                  ),
+                      borderRadius: BorderRadius.circular(15)),
                 ),
+                child: const Text("دخول وحفظ البيانات",
+                    style: TextStyle(fontWeight: FontWeight.bold)),
               ),
-              const Spacer(),
-              Center(
-                child: Text(
-                  "STL_Manager v1.0.0",
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 12.sp,
-                  ),
-                ),
-              ),
-              SizedBox(height: 15.h),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildTextField(
+      TextEditingController controller, String hint, IconData icon,
+      {bool isPass = false}) {
+    return TextField(
+      controller: controller,
+      obscureText: isPass,
+      style: const TextStyle(color: Colors.white),
+      decoration: InputDecoration(
+        hintText: hint,
+        hintStyle: const TextStyle(color: Colors.white24, fontSize: 13),
+        prefixIcon: Icon(icon, color: AppConfig.primaryGold, size: 20),
+        filled: true,
+        fillColor: AppConfig.cardGrey,
+        border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
+            borderSide: BorderSide.none),
+        focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
+            borderSide:
+                const BorderSide(color: AppConfig.primaryGold, width: 1)),
       ),
     );
   }

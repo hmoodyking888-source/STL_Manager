@@ -1,32 +1,30 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MikroTikService {
-  // هذه الدالة ستجلب معلومات النظام (CPU, Temp, Uptime)
-  static Future<Map<String, String>> getSystemResources(
-      String ip, String user, String pass) async {
-    try {
-      // ملاحظة: سنستخدم هنا بروتوكول REST API الخاص بالميكروتك (إصدار 7 فما فوق)
-      // أو سنستخدم مكتبة RouterOS API لاحقاً. حالياً سنجهز الهيكل.
+  // دالة لجلب البيانات المحفوظة من شاشة الدخول
+  static Future<Map<String, String>> getSavedCredentials() async {
+    final prefs = await SharedPreferences.getInstance();
+    return {
+      "address": prefs.getString('address') ?? "",
+      "user": prefs.getString('user') ?? "",
+      "pass": prefs.getString('pass') ?? "",
+    };
+  }
 
-      // مثال للبيانات التي ستعود للتطبيق:
+  // دالة جلب موارد النظام
+  static Future<Map<String, String>> getSystemResources() async {
+    try {
+      // حالياً نعيد قيم افتراضية حتى نتم الربط الفعلي بـ API الراوتر
       return {
-        "cpu": "15%",
-        "temp": "42°C",
-        "uptime": "5d 12h",
-        "voltage": "12.2V"
+        "cpu": "12%",
+        "temp": "41°C",
+        "uptime": "4d 02h",
+        "voltage": "23.5V"
       };
     } catch (e) {
       return {"cpu": "0%", "temp": "0", "uptime": "Error"};
     }
-  }
-
-  // دالة حقن سكريبت التلجرام التي ذكرتها في الملخص
-  static Future<bool> injectTelegramScript(
-      String chatID, String botToken) async {
-    String script =
-        "/tool fetch url=\"https://api.telegram.org/bot$botToken/sendMessage?chat_id=$chatID&text=New_User_Detected\"";
-    print("Injecting Script: $script");
-    return true; // سيتم الربط الفعلي مع الراوتر هنا
   }
 }

@@ -1,34 +1,34 @@
 import 'package:flutter/material.dart';
 import 'app_config.dart';
-import 'services/auth_service.dart';
+import 'screens/login_screen.dart';
 import 'screens/dashboard_screen.dart';
-import 'screens/lock_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // التحقق من الصلاحية قبل تشغيل التطبيق
-  bool isExpired = await AuthService.checkSubscriptionStatus();
+  // التحقق من وجود بيانات دخول محفوظة
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
 
-  runApp(STNManagerApp(isExpired: isExpired));
+  runApp(STLManagerApp(isLoggedIn: isLoggedIn));
 }
 
-class STNManagerApp extends StatelessWidget {
-  final bool isExpired;
-  const STNManagerApp({super.key, required this.isExpired});
+class STLManagerApp extends StatelessWidget {
+  final bool isLoggedIn;
+  const STLManagerApp({super.key, required this.isLoggedIn});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'STN Manager',
       debugShowCheckedModeBanner: false,
+      // تم استبدال appName بـ appBarTitle ليطابق ملف AppConfig الجديد
+      title: AppConfig.appBarTitle,
       theme: ThemeData(
         brightness: Brightness.dark,
-        scaffoldBackgroundColor: AppConfig.backgroundBlack,
         fontFamily: 'Cairo',
       ),
-      // إذا انتهت الصلاحية يفتح صفحة القفل، وإذا لا يفتح الداشبورد
-      home: isExpired ? const LockScreen() : const DashboardScreen(),
+      home: isLoggedIn ? const DashboardScreen() : const LoginScreen(),
     );
   }
 }
