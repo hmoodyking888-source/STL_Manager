@@ -85,7 +85,7 @@ class _PPPoEScreenState extends State<PPPoEScreen> {
       decoration: BoxDecoration(
         color: AppConfig.cardGrey,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withOpacity(0.3)),
+        border: Border.all(color: color.withValues(alpha: 0.3)),
       ),
       child: Column(
         children: [
@@ -105,7 +105,7 @@ class _PPPoEScreenState extends State<PPPoEScreen> {
       decoration: BoxDecoration(
         color: AppConfig.cardGrey,
         borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: Colors.white.withOpacity(0.05)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.5)),
       ),
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),

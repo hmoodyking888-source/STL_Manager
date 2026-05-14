@@ -23,7 +23,7 @@ class STLManagerApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       // تم استبدال appName بـ appBarTitle ليطابق ملف AppConfig الجديد
-      title: AppConfig.appBarTitle,
+      title: "STL_Manager",
       theme: ThemeData(
         brightness: Brightness.dark,
         fontFamily: 'Cairo',

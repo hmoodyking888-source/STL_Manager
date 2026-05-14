@@ -70,7 +70,7 @@ class _InfrastructureScreenState extends State<InfrastructureScreen> {
       decoration: BoxDecoration(
         color: AppConfig.cardGrey,
         borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: AppConfig.primaryGold.withOpacity(0.1)),
+        border: Border.all(color: AppConfig.primaryGold.withValues(alpha: 0.1)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -106,8 +106,8 @@ class _InfrastructureScreenState extends State<InfrastructureScreen> {
         borderRadius: BorderRadius.circular(15),
         border: Border.all(
             color: isOnline
-                ? Colors.green.withOpacity(0.2)
-                : Colors.red.withOpacity(0.2)),
+                ? Colors.green.withValues(alpha: 0.2)
+                : Colors.red.withValues(alpha: 0.2)),
       ),
       child: Row(
         children: [
@@ -130,7 +130,7 @@ class _InfrastructureScreenState extends State<InfrastructureScreen> {
                     style: const TextStyle(color: Colors.grey, fontSize: 12)),
                 Text(device['type']!,
                     style: TextStyle(
-                        color: AppConfig.primaryGold.withOpacity(0.7),
+                        color: AppConfig.primaryGold.withValues(alpha: 0.7),
                         fontSize: 10)),
               ],
             ),

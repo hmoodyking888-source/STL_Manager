@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../app_config.dart';
-import '../services/mikrotik_service.dart';
 import 'hotspot_screen.dart';
 import 'pppoe_screen.dart';
 import 'infrastructure_screen.dart';
@@ -92,11 +91,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
       decoration: BoxDecoration(
         color: AppConfig.cardGrey,
         borderRadius: BorderRadius.circular(30),
-        border:
-            Border.all(color: AppConfig.primaryGold.withOpacity(0.3), width: 1),
+        border: Border.all(
+            color: AppConfig.primaryGold.withValues(alpha: 0.3), width: 1),
         boxShadow: [
           BoxShadow(
-            color: AppConfig.primaryGold.withOpacity(0.05),
+            color: AppConfig.primaryGold.withValues(alpha: 0.5),
             blurRadius: 20,
             spreadRadius: 5,
           )
@@ -206,7 +205,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             decoration: BoxDecoration(
               color: AppConfig.cardGrey,
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: Colors.white.withOpacity(0.05)),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.5)),
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
