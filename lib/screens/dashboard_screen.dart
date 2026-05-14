@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../app_config.dart';
-import '../services/auth_service.dart';
+import '../services/mikrotik_service.dart';
 import 'hotspot_screen.dart';
 import 'pppoe_screen.dart';
 import 'infrastructure_screen.dart';
@@ -14,129 +14,177 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  bool isExpired = false;
-  bool isLoading = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _checkSubscription();
-  }
-
-  void _checkSubscription() async {
-    bool expired = await AuthService.checkSubscriptionStatus();
-    if (mounted) {
-      setState(() {
-        isExpired = expired;
-        isLoading = false;
-      });
-    }
-  }
+  // متغيرات حالة النظام (سيتم ربطها بـ MikroTikService لاحقاً)
+  String cpuLoad = "12%";
+  String temperature = "41°C";
+  String uptime = "4d 02h";
+  String currentSpeed = "152.4";
 
   @override
   Widget build(BuildContext context) {
-    if (isLoading) {
-      return const Scaffold(
-        backgroundColor: AppConfig.backgroundBlack,
-        body: Center(
-            child: CircularProgressIndicator(color: AppConfig.primaryGold)),
-      );
-    }
-
     return Scaffold(
       backgroundColor: AppConfig.backgroundBlack,
-      appBar: AppBar(
-        backgroundColor: AppConfig.backgroundBlack,
-        elevation: 0,
-        title: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(5),
-              decoration: BoxDecoration(
-                border: Border.all(color: AppConfig.primaryGold, width: 1),
-                shape: BoxShape.circle,
-              ),
-              child: const Text(AppConfig.appLogoText,
-                  style: TextStyle(
-                      color: AppConfig.primaryGold,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold)),
-            ),
-            const SizedBox(width: 10),
-            const Text(AppConfig.appBarTitle,
-                style: TextStyle(
-                    color: AppConfig.primaryGold,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 1.5)),
-          ],
-        ),
-        centerTitle: true,
-      ),
+      appBar: _buildAppBar(),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
+        physics: const BouncingScrollPhysics(),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            _buildStatusHeader(),
+            const SizedBox(height: 10),
+            _buildMainMonitor(), // شاشة المراقبة الذهبية
             const SizedBox(height: 30),
-            _buildGridMenu(context),
-            const SizedBox(height: 60),
-            _buildHiddenSignature(),
+            _buildActionGrid(context), // شبكة الأزرار
+            const SizedBox(height: 50),
+            _buildHiddenSignature(), // توقيعك الشخصي
           ],
         ),
       ),
     );
   }
 
-  Widget _buildStatusHeader() {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: AppConfig.cardGrey,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppConfig.primaryGold.withOpacity(0.1)),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+  // رأس الصفحة (AppBar) بتصميم عصري
+  PreferredSizeWidget _buildAppBar() {
+    return AppBar(
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      centerTitle: true,
+      title: Column(
         children: [
-          _stat("CPU", "12%"),
-          _stat("TEMP", "41°C"),
-          _stat("UPTIME", "4d"),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                  border: Border.all(color: AppConfig.primaryGold, width: 1.5),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(Icons.shield,
+                    color: AppConfig.primaryGold, size: 14),
+              ),
+              const SizedBox(width: 8),
+              const Text(
+                AppConfig.appBarTitle,
+                style: TextStyle(
+                  color: AppConfig.primaryGold,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 2,
+                  fontSize: 20,
+                ),
+              ),
+            ],
+          ),
+          const Text(
+            "ربطك بالعالم بسرعة وثقة",
+            style: TextStyle(color: Colors.white38, fontSize: 10),
+          ),
         ],
       ),
     );
   }
 
-  static Widget _stat(String label, String value) {
+  // كرت المراقبة الرئيسي (Dashboard Header)
+  Widget _buildMainMonitor() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: AppConfig.cardGrey,
+        borderRadius: BorderRadius.circular(30),
+        border:
+            Border.all(color: AppConfig.primaryGold.withOpacity(0.3), width: 1),
+        boxShadow: [
+          BoxShadow(
+            color: AppConfig.primaryGold.withOpacity(0.05),
+            blurRadius: 20,
+            spreadRadius: 5,
+          )
+        ],
+      ),
+      child: Column(
+        children: [
+          // العدادات العلوية
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _buildSmallStat("CPU", cpuLoad, Icons.memory),
+              _buildSmallStat("TEMP", temperature, Icons.thermostat),
+              _buildSmallStat("UPTIME", uptime, Icons.timer),
+            ],
+          ),
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 20),
+            child: Divider(color: Colors.white10, thickness: 1),
+          ),
+          // منطقة السرعة الحالية (Speedometer Style)
+          Column(
+            children: [
+              Text(
+                currentSpeed,
+                style: const TextStyle(
+                  color: AppConfig.primaryGold,
+                  fontSize: 48,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Cairo',
+                ),
+              ),
+              const Text(
+                "Mbps السرعة الحالية",
+                style: TextStyle(color: Colors.white54, fontSize: 12),
+              ),
+              const SizedBox(height: 10),
+              const Text(
+                "RB1100AHx4 Dude Edition",
+                style: TextStyle(
+                    color: Colors.greenAccent,
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSmallStat(String label, String value, IconData icon) {
     return Column(
       children: [
+        Icon(icon, color: AppConfig.primaryGold, size: 18),
+        const SizedBox(height: 5),
         Text(value,
-            style: TextStyle(
+            style: const TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
-                fontSize: 18)),
-        Text(label, style: TextStyle(color: Colors.grey, fontSize: 10)),
+                fontSize: 14)),
+        Text(label, style: const TextStyle(color: Colors.white30, fontSize: 9)),
       ],
     );
   }
 
-  Widget _buildGridMenu(BuildContext context) {
-    final List<Map<String, dynamic>> menuItems = [
-      {"title": "الهوتسبوت", "icon": Icons.wifi, "page": const HotspotScreen()},
+  // شبكة الأزرار (Grid Menu)
+  Widget _buildActionGrid(BuildContext context) {
+    final List<Map<String, dynamic>> items = [
       {
-        "title": "البرودباند",
-        "icon": Icons.router,
-        "page": const PPPoEScreen()
+        "name": "الهوتسبوت",
+        "icon": Icons.wifi_tethering,
+        "screen": const HotspotScreen()
       },
       {
-        "title": "قطع البث",
-        "icon": Icons.bolt,
-        "page": const InfrastructureScreen()
+        "name": "البرودباند",
+        "icon": Icons.settings_input_component,
+        "screen": const PPPoEScreen()
       },
       {
-        "title": "التلجرام",
-        "icon": Icons.telegram,
-        "page": const TelegramActivationScreen()
+        "name": "قطع البث",
+        "icon": Icons.cell_tower,
+        "screen": const InfrastructureScreen()
+      },
+      {
+        "name": "التلجرام",
+        "icon": Icons.send_rounded,
+        "screen": const TelegramActivationScreen()
       },
     ];
 
@@ -144,45 +192,58 @@ class _DashboardScreenState extends State<DashboardScreen> {
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          mainAxisSpacing: 20,
-          crossAxisSpacing: 20,
-          childAspectRatio: 1.1),
-      itemCount: menuItems.length,
-      itemBuilder: (context, index) => InkWell(
-        onTap: () => Navigator.push(context,
-            MaterialPageRoute(builder: (c) => menuItems[index]['page'])),
-        child: Container(
-          decoration: BoxDecoration(
-            color: AppConfig.cardGrey,
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: Colors.white.withOpacity(0.05)),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(menuItems[index]['icon'],
-                  color: AppConfig.primaryGold, size: 40),
-              const SizedBox(height: 10),
-              Text(menuItems[index]['title'],
-                  style: const TextStyle(color: Colors.white, fontSize: 14)),
-            ],
-          ),
-        ),
+        crossAxisCount: 2,
+        mainAxisSpacing: 20,
+        crossAxisSpacing: 20,
+        childAspectRatio: 1.2,
       ),
+      itemCount: items.length,
+      itemBuilder: (context, index) {
+        return InkWell(
+          onTap: () => Navigator.push(context,
+              MaterialPageRoute(builder: (c) => items[index]['screen'])),
+          child: Container(
+            decoration: BoxDecoration(
+              color: AppConfig.cardGrey,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: Colors.white.withOpacity(0.05)),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(items[index]['icon'],
+                    color: AppConfig.primaryGold, size: 36),
+                const SizedBox(height: 12),
+                Text(
+                  items[index]['name'],
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 15),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 
+  // توقيع المبرمج المخفي
   Widget _buildHiddenSignature() {
     return Opacity(
-      opacity: 0.3, // شفافية عالية ليكون غير ملاحظ
+      opacity: 0.2,
       child: Column(
         children: [
-          Text(AppConfig.appSignature,
-              style: const TextStyle(color: Colors.grey, fontSize: 9)),
-          const SizedBox(height: 2),
-          Text(AppConfig.developerPhone,
-              style: const TextStyle(color: Colors.grey, fontSize: 8)),
+          Text(
+            AppConfig.appSignature,
+            style: const TextStyle(color: Colors.white, fontSize: 9),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            AppConfig.developerPhone,
+            style: const TextStyle(color: Colors.white, fontSize: 8),
+          ),
         ],
       ),
     );

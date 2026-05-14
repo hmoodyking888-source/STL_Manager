@@ -1,24 +1,23 @@
 workflows:
   android-workflow:
     name: STL Manager Final Build
-    max_build_duration: 30
     environment:
       flutter: stable
       java: 17
       ndk: 28.2.13676358
     scripts:
-      - name: Dependencies
-        script: flutter pub get
-      - name: Build
+      - name: Icons Generator
         script: |
-          # سنستخدم أمر التنظيف لضمان عدم وجود بقايا من محاولات الـ 35 السابقة
-          flutter clean
           flutter pub get
-          flutter build apk --release --target-platform android-arm64 --no-tree-shake-icons
-      - name: Export Artifact
+          # تفعيل هذا السطر إذا أضفت مكتبة الأيقونات
+          # flutter pub run flutter_launcher_icons
+      - name: Build APK
+        script: |
+          flutter clean
+          flutter build apk --release --no-tree-shake-icons
+      - name: Export
         script: |
           mkdir -p $FCI_EXPORT_DIR
-          # البحث في كل مكان ونقل الملف
           find build/app/outputs/flutter-apk -name "*.apk" -exec cp {} $FCI_EXPORT_DIR/STL_Manager.apk \;
     artifacts:
       - $FCI_EXPORT_DIR/STL_Manager.apk
