@@ -1,0 +1,37 @@
+workflows:
+  android-workflow:
+    name: STL Manager Android Build
+    max_build_duration: 30
+    environment:
+      flutter: stable
+      java: 17
+      ndk: 28.2.13676358 # تحديد إصدار الـ NDK المطلوب
+    scripts:
+      - name: Prepare environment
+        script: | 
+          flutter clean
+          flutter pub get
+      - name: Build Android APK
+        script: |
+          # بناء التطبيق مع رفع الـ SDK والـ NDK
+          flutter build apk --release --target-platform android-arm64 --no-tree-shake-icons
+      - name: Post-build Search and Export
+        script: |
+          # السكربت الخاص بك للبحث الشامل عن الملف ونقله ليكون متاحاً في التحميل
+          echo "--- Searching for STL_Manager APK ---"
+          mkdir -p $FCI_EXPORT_DIR
+          find . -name "*.apk" -exec cp {} $FCI_EXPORT_DIR/STL_Manager.apk \;
+          
+          if [ -f $FCI_EXPORT_DIR/STL_Manager.apk ]; then
+            echo "STL_Manager.apk is READY in Artifacts!"
+            ls -lh $FCI_EXPORT_DIR/STL_Manager.apk
+          else
+            echo "File not found yet, checking deeper in build folder..."
+            find build -name "*.apk" -exec cp {} $FCI_EXPORT_DIR/STL_Manager.apk \;
+          fi
+    artifacts:
+      - $FCI_EXPORT_DIR/STL_Manager.apk
+    publishing:
+      email:
+        recipients:
+          - hmoodyking888@gmail.com
