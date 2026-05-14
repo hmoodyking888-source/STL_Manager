@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'app_config.dart';
 import 'screens/login_screen.dart';
 import 'screens/dashboard_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';

@@ -48,8 +48,8 @@ class LockScreen extends StatelessWidget {
               decoration: BoxDecoration(
                 color: AppConfig.cardGrey,
                 borderRadius: BorderRadius.circular(20),
-                border:
-                    Border.all(color: AppConfig.primaryGold.withOpacity(0.3)),
+                border: Border.all(
+                    color: AppConfig.primaryGold.withValues(alpha: 0.3)),
               ),
               child: Column(
                 children: [
