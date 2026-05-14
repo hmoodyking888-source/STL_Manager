@@ -1,33 +1,41 @@
 import 'package:flutter/material.dart';
-import 'screens/login_screen.dart';
-import 'screens/dashboard_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // التحقق من وجود بيانات دخول محفوظة
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
-
-  runApp(STLManagerApp(isLoggedIn: isLoggedIn));
+  runApp(const MyApp());
 }
 
-class STLManagerApp extends StatelessWidget {
-  final bool isLoggedIn;
-  const STLManagerApp({super.key, required this.isLoggedIn});
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      // تم استبدال appName بـ appBarTitle ليطابق ملف AppConfig الجديد
-      title: "STL_Manager",
-      theme: ThemeData(
-        brightness: Brightness.dark,
-        fontFamily: 'Cairo',
+      title: 'STL Manager',
+      theme: ThemeData.dark(),
+      home: const TestScreen(),
+    );
+  }
+}
+
+class TestScreen extends StatelessWidget {
+  const TestScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        title: const Text('STL Manager'),
       ),
-      home: isLoggedIn ? const DashboardScreen() : const LoginScreen(),
+      body: const Center(
+        child: Text(
+          'APP WORKING SUCCESSFULLY',
+          style: TextStyle(fontSize: 22),
+        ),
+      ),
     );
   }
 }
